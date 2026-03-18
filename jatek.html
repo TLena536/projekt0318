@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raktárjáték - Eladás/Vétel/Inventory/Statisztika</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body class="overflow-x-hidden">
+
+    <div class="min-h-screen overflow-y-scroll overflow-x-hidden block relative w-full h-full">
+
+
+        <div class="overflow-y-scroll fixed top-0 bottom-0 left-0 h-full min-h-screen w-72 bg-white px-6 py-3 shadow-lg hidden lg:block z-50" id="sidenav">
+            <div class="relative">
+                <div class="absolute top-2 right-0 text-lg text-gray-500 cursor-pointer block lg:hidden" id="closeNav">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="h-16 items-center pl-4 mb-6">
+                <div class="mt-1 logo_area text-xl font-bold uppercase text-gray-600 flex items-center justify-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                   <span class="ml-2">Raktárjáték</span>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-xl p-4 mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span> Pénz:</span>
+                    <span class="font-bold text-xl" id="menuPenz">5000 Ft</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span> Raktár:</span>
+                    <span class="font-bold text-xl" id="menuRaktar">0/20</span>
+                </div>
+            </div>
+
+            <div id="sidenav_menu_wrap">
+                <ul class="pl-0 m-0 list-none space-y-2" id="sidenav_menu">
+                    <li>
+                        <a onclick="valtOldal('eladas'); return false;" class="menu-item aktiv capitalize flex items-center justify-start py-4 pl-4 text-lg rounded-xl text-gray-700 font-semibold" id="menuEladas">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>Eladás</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a onclick="valtOldal('vetel'); return false;" class="menu-item capitalize flex items-center justify-start py-4 pl-4 text-lg rounded-xl text-gray-700 font-semibold" id="menuVetel">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                            <span>Vétel</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a onclick="valtOldal('statisztika'); return false;" class="menu-item capitalize flex items-center justify-start py-4 pl-4 text-lg rounded-xl text-gray-700 font-semibold" id="menuStatisztika">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            <span>Statisztika</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="flex fixed top-0 left-0 items-center justify-between w-full h-16 px-8 py-0 shadow-sm lg:pl-72 z-30 bg-white" id="navbar">
+    <div class="flex items-center">
+        <span class="cursor-pointer text-gray-600 block lg:hidden mr-4" id="sideBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+            </svg>
+        </span>
+        <h2 class="text-xl font-bold text-gray-700" id="aktualisOldalCim">Eladás</h2>
+    </div>
+
+        <div class="flex items-center gap-2">
+            <!-- Pénz kijelző -->
+            <div class="bg-green-100 text-green-600 px-4 py-2 rounded-lg font-bold hidden md:block">
+                <span id="penz">5000</span> Ft
+            </div>
+            
+            <!-- Raktár kijelző -->
+            <div class="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg font-bold hidden md:block">
+                <span id="raktarSzam">0</span>/20
+            </div>
+            
+            <!-- Felhasználó info és kilépés gomb -->
+            <div class="flex items-center gap-2 bg-purple-100 rounded-lg px-2 py-1" id="felhasznaloInfo">
+                <!-- Ide jön a JS-ből a felhasználó info -->
+            </div>
+            
+            <!-- Kilépés gomb -->
+            <button onclick="kijelentkezes()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-bold transition duration-200 flex items-center gap-2" title="Kijelentkezés">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span class="hidden md:inline">Kilépés</span>
+            </button>
+        </div>
+        </div>
+            </div>
+
+            <div class="absolute bottom-4 left-6 right-6 text-xs text-gray-400 text-center">
+                Készült: 2024
+            </div>
+        </div>
+
+
+        <div class="flex fixed top-0 left-0 items-center justify-between w-full h-16 px-8 py-0 shadow-sm lg:pl-72 z-30 bg-white" id="navbar">
+            <div class="flex items-center">
+                <span class="cursor-pointer text-gray-600 block lg:hidden mr-4" id="sideBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+                    </svg>
+                </span>
+                <h2 class="text-xl font-bold text-gray-700" id="aktualisOldalCim">Eladás</h2>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="bg-green-100 text-green-600 px-4 py-2 rounded-lg font-bold hidden md:block">
+                    <span id="penz">5000</span> Ft
+                </div>
+                <div class="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg font-bold hidden md:block">
+                    <span id="raktarSzam">0</span>/20
+                </div>
+            </div>
+        </div>
+
+        <!-- ELADÁS OLDAL -->
+        <div id="eladasOldal" class="oldal aktiv absolute top-20 left-0 lg:left-72 right-0 p-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-2xl font-bold text-gray-700">Raktárkészlet - ELADÁS</h2>
+                            <span class="bg-green-100 text-green-600 px-4 py-2 rounded-lg font-bold" id="kivalasztottTermekEladas">Nincs kiválasztva</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="polc" id="eladasPolc0"></div>
+                            <div class="polc" id="eladasPolc1"></div>
+                            <div class="polc" id="eladasPolc2"></div>
+                            <div class="polc" id="eladasPolc3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-1">
+                    <div class="alku-panel rounded-xl shadow-lg p-6 text-white">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="text-5xl" id="eladasPartnerIkon"></span>
+                            <div>
+                                <div class="text-xl font-bold" id="eladasPartnerTipus">Várjuk a partnert...</div>
+                                <div class="text-sm opacity-90">Válassz ki egy terméket</div>
+                            </div>
+                        </div>
+
+                        <div id="eladasAktivAlku" style="display: none;">
+                            <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                                <div class="text-center text-white text-lg mb-2" id="eladasAjanlatSzoveg"></div>
+                                <div class="tunetmertek">
+                                    <div class="tunetmertek-tolt" id="eladasTurelemCsik" style="width: 100%"></div>
+                                </div>
+                                <div class="flex flex-col gap-2 mt-4" id="eladasAlkuGombok"></div>
+                            </div>
+                        </div>
+
+                        <div id="eladasNincsAktiv" style="display: block;">
+                            <p class="text-center text-white py-4">Válassz ki egy terméket a raktárból!</p>
+                        </div>
+
+                        <button class="w-full mt-4 bg-white text-green-600 py-3 rounded-lg font-bold hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed" onclick="keresPartner('eladas')" id="eladasPartnerGomb" disabled>
+                            Partner keresése
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6 mt-6">
+                        <h3 class="text-lg font-bold text-gray-700 mb-3">Termékek vásárlása</h3>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="vasarolTermeket(0)" class="bg-green-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-green-600 transition">💻 Laptop (300)</button>
+                            <button onclick="vasarolTermeket(1)" class="bg-green-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-green-600 transition">📱 Telefon (200)</button>
+                            <button onclick="vasarolTermeket(2)" class="bg-green-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-green-600 transition">📟 Tablet (250)</button>
+                            <button onclick="vasarolTermeket(3)" class="bg-green-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-green-600 transition">🎧 Fejhallgató (100)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--VÉTEL OLDAL-->
+        <div id="vetelOldal" class="oldal absolute top-20 left-0 lg:left-72 right-0 p-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-2xl font-bold text-gray-700">Raktárkészlet - VÉTEL</h2>
+                            <span class="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg font-bold">Megtekintés</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="polc" id="vetelPolc0"></div>
+                            <div class="polc" id="vetelPolc1"></div>
+                            <div class="polc" id="vetelPolc2"></div>
+                            <div class="polc" id="vetelPolc3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-1">
+                    <div class="alku-panel rounded-xl shadow-lg p-6 text-white">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="text-5xl" id="vetelPartnerIkon"></span>
+                            <div>
+                                <div class="text-xl font-bold" id="vetelPartnerTipus">Várjuk a partnert...</div>
+                                <div class="text-sm opacity-90">Partner fog ajánlani egy terméket</div>
+                            </div>
+                        </div>
+
+                        <div id="vetelAktivAlku" style="display: none;">
+                            <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                                <div class="text-center text-white text-lg mb-2" id="vetelAjanlatSzoveg"></div>
+                                <div class="tunetmertek">
+                                    <div class="tunetmertek-tolt" id="vetelTurelemCsik" style="width: 100%"></div>
+                                </div>
+                                <div class="flex flex-col gap-2 mt-4" id="vetelAlkuGombok"></div>
+                            </div>
+                        </div>
+
+                        <div id="vetelNincsAktiv" style="display: block;">
+                            <p class="text-center text-white py-4">Kattints a partner keresésére!</p>
+                        </div>
+
+                        <button class="w-full mt-4 bg-white text-blue-600 py-3 rounded-lg font-bold hover:bg-gray-100 transition" onclick="keresPartner('vetel')" id="vetelPartnerGomb">
+                         Partner keresése
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--STATISZTIKA-->
+        <div id="statisztikaOldal" class="oldal absolute top-20 left-0 lg:left-72 right-0 p-6">
+            <h2 class="text-2xl font-bold text-white mb-6">Statisztika</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <div class="stat-card">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">Összes bevétel</p>
+                            <p class="text-2xl font-bold" id="statBevetel">0 Ft</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-red-100 p-3 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">Összes kiadás</p>
+                            <p class="text-2xl font-bold" id="statKiadas">0 Ft</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">Profit</p>
+                            <p class="text-2xl font-bold" id="statProfit">0 Ft</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-purple-100 p-3 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">Partnerek száma</p>
+                            <p class="text-2xl font-bold" id="statPartnerek">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="font-bold text-gray-700 mb-4">Eladási statisztika</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span>Sikeres eladások:</span>
+                            <span class="font-bold" id="statSikeresEladas">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Sikertelen alkuk:</span>
+                            <span class="font-bold" id="statSikertelenEladas">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Átlag eladási ár:</span>
+                            <span class="font-bold" id="statAtlagEladas">0 Ft</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="font-bold text-gray-700 mb-4">Vásárlási statisztika</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span>Sikeres vásárlások:</span>
+                            <span class="font-bold" id="statSikeresVetel">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Elutasított ajánlatok:</span>
+                            <span class="font-bold" id="statSikertelenVetel">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Átlag vételi ár:</span>
+                            <span class="font-bold" id="statAtlagVetel">0 Ft</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INVENTORY OLDAL -->
+        <div id="inventoryOldal" class="oldal absolute top-20 left-0 lg:left-72 right-0 p-6">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-gray-700">Raktárkészlet - INVENTORY</h2>
+                    <span class="bg-purple-100 text-purple-600 px-4 py-2 rounded-lg font-bold">
+                        Összesen: <span id="inventoryOsszesen">0</span>/20
+                    </span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="polc" id="inventoryPolc0"></div>
+                    <div class="polc" id="inventoryPolc1"></div>
+                    <div class="polc" id="inventoryPolc2"></div>
+                    <div class="polc" id="inventoryPolc3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BEJELENTKEZÉS / REGISZTRÁCIÓ OLDAL -->
+        <div id="bejelentkezesOldal" class="oldal absolute top-20 left-0 lg:left-72 right-0 p-6">
+            <div class="max-w-md mx-auto">
+                <!-- Bejelentkezési űrlap -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                    <h2 class="text-2xl font-bold text-gray-700 mb-6">Bejelentkezés</h2>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="loginEmail">
+                            Email cím
+                        </label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                            id="loginEmail" type="email" placeholder="pelda@email.com">
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="loginPassword">
+                            Jelszó
+                        </label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                            id="loginPassword" type="password" placeholder="********">
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+                                onclick="bejelentkezes()">
+                            Bejelentkezés
+                        </button>
+                        <span class="text-sm text-gray-600">Nincs még fiókod?</span>
+                    </div>
+                </div>
+
+                <!-- Regisztrációs űrlap -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-gray-700 mb-6">Regisztráció</h2>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="regName">
+                            Teljes név
+                        </label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                            id="regName" type="text" placeholder="Kiss János">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="regEmail">
+                            Email cím
+                        </label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                            id="regEmail" type="email" placeholder="pelda@email.com">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="regPassword">
+                            Jelszó
+                        </label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                            id="regPassword" type="password" placeholder="********">
+                        <p class="text-xs text-gray-500 mt-1">Legalább 8 karakter hosszú</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="regPasswordConfirm">
+                            Jelszó megerősítése
+                        </label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                            id="regPasswordConfirm" type="password" placeholder="********">
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+                                onclick="regisztracio()">
+                            Regisztráció
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bejelentkezett felhasználó info -->
+                <div id="bejelentkezettInfo" class="bg-white rounded-xl shadow-lg p-6 mt-6" style="display: none;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-700">Bejelentkezve</h3>
+                            <p class="text-gray-600" id="aktualisFelhasznalo"></p>
+                        </div>
+                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" 
+                                onclick="kijelentkezes()">
+                            Kijelentkezés
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="uzenet" class="uzenet" style="display: none;"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

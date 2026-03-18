@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raktárjáték - Bejelentkezés</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        .register-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .register-panel.open {
+            max-height: 600px;
+            transition: max-height 0.5s ease-in;
+        }
+        .aktiv-felhasznalo-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto px-4">
+        <div class="max-w-md mx-auto">
+            <!-- Logo -->
+            <div class="text-center mb-8">
+                <div class="inline-block bg-white p-4 rounded-full shadow-lg mb-4 pulse-animation">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-bold text-white">Raktárjáték</h1>
+                <p class="text-white opacity-90">Jelentkezz be a játékhoz</p>
+            </div>
+
+            <!-- Aktív felhasználók számláló -->
+            <div class="aktiv-felhasznalo-card rounded-xl p-4 mb-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <span class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full"></span>
+                        </div>
+                        <div>
+                            <p class="text-sm opacity-90">Aktív felhasználók</p>
+                            <p class="text-2xl font-bold" id="aktivFelhasznaloSzam">0</p>
+                        </div>
+                    </div>
+                    <div class="flex -space-x-2" id="aktivFelhasznaloAvaterek">
+                        <!-- Ide jönnek dinamikusan az avatárok -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bejelentkezési űrlap -->
+            <div class="login-card p-8 mb-4">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                    </svg>
+                    Bejelentkezés
+                </h2>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="loginEmail">
+                        Email cím
+                    </label>
+                    <input class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                        id="loginEmail" type="email" placeholder="pelda@email.com">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="loginPassword">
+                        Jelszó
+                    </label>
+                    <input class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                        id="loginPassword" type="password" placeholder="********">
+                </div>
+                
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 transform hover:scale-105" 
+                        onclick="bejelentkezes()">
+                    Bejelentkezés
+                </button>
+            </div>
+
+            <!-- Lenyíló regisztrációs panel -->
+            <div class="login-card p-8">
+                <div class="flex justify-between items-center cursor-pointer" onclick="toggleRegister()">
+                    <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                        </svg>
+                        Regisztráció
+                    </h2>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 transform transition-transform duration-300" id="registerArrow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                
+                <div id="registerPanel" class="register-panel">
+                    <div class="mt-6">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="regName">
+                                Teljes név
+                            </label>
+                            <input class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" 
+                                id="regName" type="text" placeholder="Kiss János">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="regEmail">
+                                Email cím
+                            </label>
+                            <input class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" 
+                                id="regEmail" type="email" placeholder="pelda@email.com">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="regPassword">
+                                Jelszó
+                            </label>
+                            <input class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" 
+                                id="regPassword" type="password" placeholder="********">
+                            <p class="text-xs text-gray-500 mt-1">Legalább 8 karakter hosszú</p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="regPasswordConfirm">
+                                Jelszó megerősítése
+                            </label>
+                            <input class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" 
+                                id="regPasswordConfirm" type="password" placeholder="********">
+                        </div>
+                        
+                        <button class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 transform hover:scale-105" 
+                                onclick="regisztracio()">
+                            Regisztráció
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vendégként belépés -->
+            <div class="text-center mt-6">
+                <button onclick="vendegBelépés()" class="text-white hover:text-gray-200 underline flex items-center justify-center gap-2 mx-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Folytatás vendégként
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "game": {
+    "startPenz": 5000,
+    "maxRaktar": 20,
+    "alkuEmel": 200,
+    "alkuCsokkent": 150,
+    "turelemCsokkenes": 15,
+    "minVetelAr": 50
+  },
+  "termekek": [
+    { "nev": "Laptop", "ikon": "💻", "vetelar": 300, "eladasiAr": 500 },
+    { "nev": "Telefon", "ikon": "📱", "vetelar": 200, "eladasiAr": 350 },
+    { "nev": "Tablet", "ikon": "📟", "vetelar": 250, "eladasiAr": 450 },
+    { "nev": "Fejhallgató", "ikon": "🎧", "vetelar": 100, "eladasiAr": 200 },
+    { "nev": "Okosóra", "ikon": "⌚", "vetelar": 180, "eladasiAr": 320 },
+    { "nev": "Fényképező", "ikon": "📷", "vetelar": 400, "eladasiAr": 700 },
+    { "nev": "Játékkonzol", "ikon": "🎮", "vetelar": 600, "eladasiAr": 1000 },
+    { "nev": "Hangszóró", "ikon": "🔊", "vetelar": 220, "eladasiAr": 380 }
+  ],
+  "partnerek": [
+    { "nev": "Türelmes Béla", "turelem": 100, "alkukepesseg": 3 },
+    { "nev": "Alkudozó Anna", "turelem": 70, "alkukepesseg": 2 },
+    { "nev": "Nagykereskedő", "turelem": 60, "alkukepesseg": 2 },
+    { "nev": "Viszonteladó", "turelem": 80, "alkukepesseg": 3 },
+    { "nev": "Türelmetlen Tomi", "turelem": 40, "alkukepesseg": 1 },
+    { "nev": "Nagylelkű Nóra", "turelem": 90, "alkukepesseg": 4 },
+    { "nev": "Szigorú Sanyi", "turelem": 30, "alkukepesseg": 1 }
+  ],
+  "demoUsers": [
+    { "nev": "Teszt Elek", "email": "teszt@example.com", "jelszo": "12345678" },
+    { "nev": "Minta Márta", "email": "minta@example.com", "jelszo": "12345678" },
+    { "nev": "Próba Péter", "email": "proba@example.com", "jelszo": "12345678" }
+  ],
+  "demoNames": ["Anna", "Péter", "Eszter", "Gábor", "Dóra"],
+  "colors": ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7", "#DDA0DD"]
+}
